@@ -2,15 +2,19 @@ import { Component, Input, OnInit } from '@angular/core';
 import { MovieApiServiceService } from '../../service/movie-api-service.service';
 import { Injectable, inject } from '@angular/core';
 import { MovieModel } from '../../Models/MovieModel';
+import { NgIf, CommonModule } from '@angular/common';
+
+
 
 @Component({
   selector: 'app-movie-overview',
   standalone: true,
-  imports: [],
+  imports: [CommonModule],
   templateUrl: './movie-overview.component.html',
   styleUrl: './movie-overview.component.css'
 })
 export class MovieOverviewComponent implements OnInit {
+
   @Input() moviesOut: any = [];
   movies = this.moviesOut;
   movie! : MovieModel;
@@ -45,4 +49,6 @@ export class MovieOverviewComponent implements OnInit {
     // passing the movies to the movie service to export to excel.
     this.movieService.exportToExcel(movies);
   }
+
+  
 }

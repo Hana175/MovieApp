@@ -24,6 +24,8 @@ export class MovieApiServiceService {
   lastClickedMovies: MovieModel[] = [];
   // declaring the previously viewed movies array to be used in suggestions.
   PreviouslyViewedMovies: MovieModel[] = [];
+  uniqueMovieIds = new Set<number>();
+
 
   constructor(private http: HttpClient) { }
   // Get all movies
@@ -43,6 +45,7 @@ export class MovieApiServiceService {
       tap((movie: MovieModel) => {
         this.lastClickedMovies.push(movie); // Push the clicked movie details to the array
         this.PreviouslyViewedMovies.push(movie); // Push the viewed movies' details to the array
+        this.setPreviouslyViewedMovies(this.PreviouslyViewedMovies);
         if (this.PreviouslyViewedMovies.length > 10) {
           this.PreviouslyViewedMovies.shift(); // Remove the oldest clicked movie if the array length exceeds 10
         }
@@ -50,12 +53,19 @@ export class MovieApiServiceService {
           this.lastClickedMovies.shift(); // Remove the oldest clicked movie if the array length exceeds 10
         }
       })
+      
     );
+  }
+  //awel 7aga: load movies el fel home page yekon leha getmoves mo5talefa be page number mo5talefa 3shan ama agy a search maybd2sh mn page ghalat
+  // 
+  getMoviesHome(): Observable<ListModel> {
+    return this.http.get<ListModel>(this.apiURL + this.apiKey + "&page=1");
   }
 
   // Get movie pages by page number, returns list of movies when user scrolls.
   getMoviesPages(pageNumber: number): Observable<ListModel> {
     const url = this.apiURL + this.apiKey + "&page=" + pageNumber;
+    console.log(pageNumber);
     return this.http.get<ListModel>(url);
   }
 
@@ -66,9 +76,22 @@ export class MovieApiServiceService {
   
   // sets previously viewed movies array used for suggestions.
   setPreviouslyViewedMovies(movies: MovieModel[]) {
-    // Store the last 10 clicked movies
-    this.PreviouslyViewedMovies = movies.slice(0, 10);
+    // Use a Set to keep track of unique movie IDs
+    const uniqueMovieIds = new Set<number>();
+    const filteredMovies = [];
+  
+    for (const movie of movies) {
+      // Check if the movie ID is already in the set
+      if (!uniqueMovieIds.has(movie.id)) {
+        uniqueMovieIds.add(movie.id); // Add movie ID to the set
+        filteredMovies.push(movie); // Add the movie to the filtered array
+      }
+    }
+  
+    // Ensure only the last 10 viewed movies are kept
+    this.PreviouslyViewedMovies = filteredMovies.slice(-10);
   }
+  
 
  // Method to get last clicked movies
  getLastClickedMovies(): MovieModel[] {

@@ -5,6 +5,7 @@ import { Injectable, inject } from '@angular/core';
 import { MovieOverviewComponent } from '../movie-overview/movie-overview.component';
 import { Output } from '@angular/core';
 
+
 @Component({
   selector: 'app-home',
   standalone: true,
@@ -18,19 +19,20 @@ export class HomeComponent implements OnInit {
   
 
   // inject the movie service to use the services across the files.
+
     private movieService = inject(MovieApiServiceService);
     @Output()
     movies: any = [];
   
     // initialize the load movies function
     ngOnInit(): void {
-      this.loadMovies();
+      this.loadHome();
     }
   
     // function to load the movies
-    loadMovies() {
+    loadHome() {
       // gets the movies from the movie service by subscribing to the  returned observable
-      this.movieService.getMovies().subscribe({
+      this.movieService.getMoviesHome().subscribe({
         // next is the callback function that gets called when the observable emits a value
         next: (res: any) => {
           this.movies = res.results;
@@ -42,6 +44,7 @@ export class HomeComponent implements OnInit {
         },
       });
     }
+    
   }
   
 

@@ -1,6 +1,6 @@
-<div class="container border rounded p-4" style="margin-top: 5rem;">
+<div class="container border rounded p-4" *ngIf="movie" style="margin-top: 5rem;">
   <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-4" >
       <img [src]="'https://image.tmdb.org/t/p/w500' + movie.poster_path" alt="{{ movie.original_title }}" class="img-fluid">
     </div>
     <div class="col-md-8">

@@ -18,7 +18,7 @@ import { Observable } from 'rxjs';
 
 export class SearchComponent {
   // declaring page number to be used in the infinite scroll
-  pageNumber: number = 1;
+  pageNumber: number = 2;
   // Declare loading property
   loading: boolean = false;
   // Declare lastClickedMovies property
@@ -67,6 +67,7 @@ export class SearchComponent {
         // Concatenate newMovies with existing movies array
         this.movies = this.movies.concat(newMovies); 
         this.pageNumber++;
+        
         this.loading = false; // Set loading state to false after loading
       },
       error: (error) => {
@@ -75,16 +76,26 @@ export class SearchComponent {
       }
     });
   }
-  // Method to handle the scroll event
+
+  // Method to handle the scroll event and prevent rendering the same page more than once.
+  scrollTimeout: any;
+
   onScroll() {
-    if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
-      // Load more movies when scrolled to bottom
-      this.loadMovies();
+    if (this.scrollTimeout) {
+      clearTimeout(this.scrollTimeout);
     }
+
+    this.scrollTimeout = setTimeout(() => {
+      if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
+        // Load more movies when scrolled to bottom
+        this.loadMovies();
+      }
+    }, 200); // Adjust the delay time (in milliseconds) as needed
   }
   // Method to navigate to the movie overview page and gives the movie id as a parameter.
   goToMovieOverview(movieId: number) {
-    console.log(this.movieService.getMovie(movieId) )
+    
+    console.log(this.movieService.getMovie(movieId))
     this.movieService.id = movieId;
     this.router.navigate(['/movie', movieId]); // Navigate to MovieOverviewComponent with the movie ID as a parameter
   }

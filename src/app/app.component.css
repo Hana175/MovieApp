@@ -1,5 +1,6 @@
 
 .navbar .navbar-brand{
+    cursor: pointer;
     color: rgb(0, 89, 121);
     font-weight:bold;
 }

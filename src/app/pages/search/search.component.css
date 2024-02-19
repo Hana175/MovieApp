@@ -18,3 +18,6 @@
     transition: transform 0.5s;
     box-shadow: inset 0 0 5px #0085e5;
 }
+.card{
+    cursor: pointer;
+}
