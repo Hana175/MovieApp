@@ -1,0 +1,13 @@
+
+.navbar .navbar-brand{
+    color: rgb(0, 89, 121);
+    font-weight:bold;
+}
+.navbar-nav .nav-item .nav-link{
+    font-weight:bold;
+    color:  rgb(0, 89, 121);
+
+}
+.navbar{
+    background-color: rgb(194, 219, 240);
+}

@@ -1,0 +1,20 @@
+<div class="container border rounded p-4" style="margin-top: 5rem;">
+  <div class="row">
+    <div class="col-md-4">
+      <img [src]="'https://image.tmdb.org/t/p/w500' + movie.poster_path" alt="{{ movie.original_title }}" class="img-fluid">
+    </div>
+    <div class="col-md-8">
+      <h2>{{ movie.original_title }}</h2>
+      <p>{{ movie.overview }}</p>
+      <p>Released: {{ movie.release_date }}</p>
+      <p>Original Language: {{ movie.original_language}}</p>
+      <p>Adult: {{movie.adult}}</p>
+      <p>Popularity: {{movie.popularity}}</p>
+      <p>Vote Average: {{movie.vote_average}}</p>
+      <p>Vote Count: {{movie.vote_count}}</p>
+      <p>Video: {{movie.video}}</p>
+      <p>Movie ID: {{movie.id}}</p>
+      <button class="btn btn-primary" (click)="exportToExcel()">Export to Excel</button>
+    </div>
+  </div>
+</div>

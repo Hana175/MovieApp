@@ -1,0 +1,49 @@
+<div class="container">
+  <div class="row">
+    <!-- Input field for searching -->
+    <input class="form-control" type="text" placeholder="Enter keywords.." (keyup)="TakeMovie($event)" (focus)="showLastClickedMovies()" style="margin: auto; margin-top: 2rem; height:3rem; width: 25rem;">
+    <!-- list to display last viewed movies that user has previously clicked on -->
+    <div *ngIf="showLastViewed" class="row justify-content-center mt-3">
+      <p>Previously viewed</p>
+      <div class="col-12 col-sm-6 col-md-4 col-lg-3" *ngFor="let movie of lastViewedMovies" (click)="goToMovieOverview(movie.id)">
+        <div class="card mb-3" style="overflow: scroll;">
+          <img class="card-img-top" [src]="'https://image.tmdb.org/t/p/w500/' + movie.poster_path" alt="{{ movie.original_title }}">
+          <div class="card-body" style="overflow: scroll;">
+            <h5 class="card-title">{{ movie.original_title }}</h5>
+            <p class="card-text">{{ movie.overview }}</p>
+            <p class="card-text">Released: {{ movie.release_date }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <hr>
+  </div>
+
+
+  <!-- Movies list -->
+  <div class="row row-cols-1 row-cols-md-5" style="margin-top: 1.5rem;" (window:scroll)="onScroll()">
+    <!-- Check if movies array is empty -->
+    <div *ngIf="movies.length === 0">
+      <p class="alert alert-warning" role="alert" style="height: 3rem; width: 25rem;">No movies found, try searching something else?</p>
+    </div>
+
+    <!-- Render movies if array is not empty -->
+    <div class="col" *ngFor="let movie of movies">
+      <div *ngIf="movie" class="card" style="margin: 0.5rem;" (click)="goToMovieOverview(movie.id)">
+        <img class="card-img-top" [src]="'https://image.tmdb.org/t/p/w500' + movie.poster_path" alt="{{ movie.original_title }}">
+        <div class="card-body" style="height: 10rem; overflow: scroll;">
+          <h5 class="card-title">{{ movie.original_title }}</h5>
+          <p class="card-text">{{ movie.overview }}</p>
+          <p class="card-text">Released: {{ movie.release_date }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading indicator -->
+  <div *ngIf="loading" class="text-center">
+    <div class="spinner-border" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+</div>
