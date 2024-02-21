@@ -46,6 +46,7 @@ export class SearchComponent {
       // if user enters anything in the search input field, search movies is called from the service and the movies are returned using subscribe from the observable.
       this.movieService.searchMovies(movie).subscribe({
         next: (res: any) => {
+    
           this.movies = res.results;
           console.log(res.results);
         },

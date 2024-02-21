@@ -39,10 +39,11 @@ export class MovieApiServiceService {
   }
 
   // Get movie details by ID
-  getMovie(movieId: number): Observable<MovieModel> {
+  getMovie(movieId: number): Observable<MovieModel> { //observables are like flow in kotlin and subscribe is what consumes the data emitted by observable.
     const urlTest = this.movieURL + movieId.toString();
-    return this.http.get<MovieModel>(urlTest + '?' + 'api_key=' + this.apiKey).pipe(
-      tap((movie: MovieModel) => {
+    return this.http.get<MovieModel>(urlTest + '?' + 'api_key=' + this.apiKey).pipe( // pipe creates a new observable with the use of operators.
+      tap((movie: MovieModel) => {//tap is used to perform side effects with observable data without changing the data itself.
+
         this.lastClickedMovies.push(movie); // Push the clicked movie details to the array
         this.PreviouslyViewedMovies.push(movie); // Push the viewed movies' details to the array
         this.setPreviouslyViewedMovies(this.PreviouslyViewedMovies);
@@ -70,27 +71,62 @@ export class MovieApiServiceService {
   }
 
   // gets previously viewed movies array used for suggestions.
+  // getPreviouslyViewedMovies(): MovieModel[] {
+  //   return this.PreviouslyViewedMovies;
+  // }
   getPreviouslyViewedMovies(): MovieModel[] {
-    return this.PreviouslyViewedMovies;
-  }
+    // Retrieve previously viewed movies from local storage if available
+    const previouslyViewedMoviesJSON = localStorage.getItem('previouslyViewedMovies');
+    return previouslyViewedMoviesJSON ? JSON.parse(previouslyViewedMoviesJSON) : [];
+}
+
   
-  // sets previously viewed movies array used for suggestions.
+  // // sets previously viewed movies array used for suggestions.
+  // setPreviouslyViewedMovies(movies: MovieModel[]) {
+  //   // Use a Set to keep track of unique movie IDs
+  //   const uniqueMovieIds = new Set<number>();
+  //   const filteredMovies = [];
+  
+  //   for (const movie of movies) {
+  //     // Check if the movie ID is already in the set
+  //     if (!uniqueMovieIds.has(movie.id)) {
+  //       uniqueMovieIds.add(movie.id); // Add movie ID to the set
+  //       filteredMovies.push(movie); // Add the movie to the filtered array
+  //     }
+  //   }
+  
+  //   // Ensure only the last 10 viewed movies are kept
+  //   this.PreviouslyViewedMovies = filteredMovies.slice(-10);
+  // }
+
   setPreviouslyViewedMovies(movies: MovieModel[]) {
+    // Retrieve previously viewed movies from local storage if available
+    const previouslyViewedMoviesJSON = localStorage.getItem('previouslyViewedMovies');
+    let previouslyViewedMovies = previouslyViewedMoviesJSON ? JSON.parse(previouslyViewedMoviesJSON) : [];
+
     // Use a Set to keep track of unique movie IDs
     const uniqueMovieIds = new Set<number>();
-    const filteredMovies = [];
-  
-    for (const movie of movies) {
-      // Check if the movie ID is already in the set
-      if (!uniqueMovieIds.has(movie.id)) {
-        uniqueMovieIds.add(movie.id); // Add movie ID to the set
-        filteredMovies.push(movie); // Add the movie to the filtered array
-      }
+
+    // Iterate over previously viewed movies and add their IDs to the set
+    for (const movie of previouslyViewedMovies) {
+        uniqueMovieIds.add(movie.id);
     }
-  
+
+    // Iterate over new movies and add unique ones to the set and array
+    for (const movie of movies) {
+        if (!uniqueMovieIds.has(movie.id)) {
+            uniqueMovieIds.add(movie.id);
+            previouslyViewedMovies.push(movie);
+        }
+    }
+
     // Ensure only the last 10 viewed movies are kept
-    this.PreviouslyViewedMovies = filteredMovies.slice(-10);
-  }
+    previouslyViewedMovies = previouslyViewedMovies.slice(-10);
+
+    // Update the previously viewed movies in local storage
+    localStorage.setItem('previouslyViewedMovies', JSON.stringify(previouslyViewedMovies));
+}
+
   
 
  // Method to get last clicked movies

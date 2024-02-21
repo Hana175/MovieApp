@@ -16,8 +16,6 @@ import { Output } from '@angular/core';
 export class HomeComponent implements OnInit {
   
   // HideOver: boolean= false;
-  
-
   // inject the movie service to use the services across the files.
 
     private movieService = inject(MovieApiServiceService);
